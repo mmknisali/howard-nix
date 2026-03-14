@@ -3,7 +3,8 @@
 {
   imports = [
     ./hardware-configuration.nix
-  ];
+    ./config/starship/starship.nix
+];
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "nodev";

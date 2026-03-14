@@ -3,7 +3,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./config/starship.nix
   ];
 
   boot.loader.grub.enable = true;
@@ -81,6 +80,8 @@
       EDITOR = "nvim";
     };
   };
+
+
 
   # Packages
   environment.systemPackages = with pkgs; [

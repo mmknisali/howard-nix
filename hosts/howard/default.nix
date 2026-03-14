@@ -64,11 +64,11 @@
     isNormalUser = true;
     description = "Ali";
     extraGroups = [ "wheel" "networkmanager" ];
-    openssh.authorizedKeys.keyfile = [ /home/ali/system-config/hosts/howard/keys ];
+    openssh.authorizedKeys.keyFiles = [ /home/ali/system-config/hosts/howard/keys ];
   };
 
   users.users.root = {
-    openssh.authorizedKeys.keyfile = [ /home/ali/system-config/hosts/howard/keys ];
+    openssh.authorizedKeys.keyFiles = [ /home/ali/system-config/hosts/howard/keys ];
   };
 
   # Environment

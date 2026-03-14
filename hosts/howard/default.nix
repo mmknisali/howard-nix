@@ -1,8 +1,8 @@
-{ pkgs, pkgs-unstable, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
+    ./config/starship.nix
   ];
 
   boot.loader.grub.enable = true;

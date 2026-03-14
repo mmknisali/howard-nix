@@ -70,7 +70,10 @@
 
   users.users.root = {
     openssh.authorizedKeys.keyFiles = [ /home/ali/system-config/hosts/howard/keys ];
-  };
+ };
+
+  users.users.root.shell = pkgs.zsh;
+  users.users.ali.shell = pkgs.zsh
 
   # Environment
   environment = {

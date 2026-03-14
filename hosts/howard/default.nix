@@ -73,7 +73,7 @@
  };
 
   users.users.root.shell = pkgs.zsh;
-  users.users.ali.shell = pkgs.zsh
+  users.users.ali.shell = pkgs.zsh;
 
   # Environment
   environment = {

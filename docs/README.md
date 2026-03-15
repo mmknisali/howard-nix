@@ -33,10 +33,10 @@ NixOS flake-based system configuration for the "howard" machine.
 
 ```bash
 # Build and apply changes
-sudo nixos-rebuild switch --flake .#howard
+sudo nixos-rebuild switch --flake .#howard --impure
 
 # Test changes without applying
-sudo nixos-rebuild dry-build --flake .#howard
+sudo nixos-rebuild dry-build --flake .#howard --impure
 
 # Update nixpkgs
 sudo nix flake update

@@ -113,10 +113,6 @@
     fastfetch
     neofetch
    
-    #development
-    devenv
-    direnv
-
     #screensaver
     cmatrix
 

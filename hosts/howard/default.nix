@@ -112,6 +112,13 @@
     # System info
     fastfetch
     neofetch
+   
+    #development
+    devenv
+    direnv
+
+    #screensaver
+    cmatrix
 
     # Networking
     iputils

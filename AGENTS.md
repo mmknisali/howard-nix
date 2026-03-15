@@ -8,17 +8,36 @@ This repository contains a NixOS flake-based system configuration for the "howar
 .
 ├── flake.nix                    # Flake entry point
 ├── flake.lock                   # Locked dependencies
+├── AGENTS.md                    # This file (for AI agents)
+├── docs/                        # User documentation
+│   ├── README.md
+│   ├── getting-started.md
+│   ├── configuration.md
+│   ├── zsh-customization.md
+│   ├── troubleshooting.md
+│   └── architecture.md
 └── hosts/
     └── howard/
         ├── default.nix          # Main system configuration
         ├── hardware-configuration.nix  # Auto-generated hardware config
+        ├── keys                 # SSH public keys
         └── config/
-            └── starship/
-                ├── starship.nix  # Starship module
-                └── starship.toml # Starship settings
+            ├── starship/
+            │   ├── starship.nix  # Starship module
+            │   └── starship.toml # Starship settings
+            └── zsh/
+                ├── zsh.nix       # Zsh NixOS module
+                ├── .zshenv       # Zsh environment
+                ├── .zshrc        # Interactive config
+                ├── user.zsh      # User customizations
+                ├── prompt.zsh    # Prompt config
+                ├── plugin.zsh    # Plugin setup
+                └── conf.d/       # HyDE configurations
 ```
 
 ## Build Commands
+
+> **Note:** `nix eval` requires `--impure` because of absolute paths (SSH keys). Use `nixos-rebuild` for building (it uses impure mode automatically).
 
 ### Building the System
 
@@ -36,8 +55,8 @@ sudo nixos-rebuild build --flake .#howard
 ### Testing Changes
 
 ```bash
-# Evaluate the configuration (quick syntax check)
-nix eval .#nixosConfigurations.howard.config.system.build.toplevel.drvPath --json
+# Evaluate the configuration (requires --impure for absolute paths)
+nix eval --impure .#nixosConfigurations.howard.config.system.build.toplevel.drvPath
 
 # Check for configuration errors
 sudo nixos-rebuild dry-build --flake .#howard
@@ -167,3 +186,25 @@ in
 For Nix language server support, add to your Neovim config:
 - `nix-language-server` or `nil_ls` (Nix LSP)
 - Tree-sitter for Nix syntax highlighting
+
+## Zsh Configuration
+
+The zsh config is managed by:
+1. **`zsh.nix`** - NixOS module that copies `config/zsh/` to `/etc/zsh`
+2. **HyDE** - zsh framework loaded from `conf.d/`
+
+### Customization Files
+
+| File | Purpose | Edit? |
+|------|---------|-------|
+| `user.zsh` | User customizations, plugins | **YES** |
+| `prompt.zsh` | Prompt configuration | **YES** |
+| `plugin.zsh` | Plugin manager setup | **YES** |
+| `.zshrc` | Interactive shell config | **YES** |
+| `conf.d/hyde/*` | HyDE system files | NO |
+
+### HyDE Variables
+
+Set in `user.zsh`:
+- `HYDE_ZSH_NO_PLUGINS=1` - Disable OMZ plugins
+- `HYDE_ZSH_PROMPT` - Unset to disable HyDE prompt

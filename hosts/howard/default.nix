@@ -4,7 +4,13 @@
   imports = [
     ./hardware-configuration.nix
     ./config/starship/starship.nix
-];
+    ./config/zsh/zsh.nix
+  ];
+
+  hydeZsh = {
+    enable = true;
+    source = ./config/zsh;
+  };
 
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "nodev";
@@ -77,9 +83,6 @@
 
   # Environment
   environment = {
-    shellInit = ''
-      eval "$(direnv hook zsh)"
-    '';
     variables = {
       EDITOR = "nvim";
     };
@@ -137,9 +140,6 @@
     # Tailscale (should auto-install via service, but ensuring package)
     tailscale
   ];
-
-  # Enable zsh globally - FIXED: This was missing and causing the error
-  programs.zsh.enable = true;
 
   # Configure zsh as default shell for user
   users.defaultUserShell = pkgs.zsh;

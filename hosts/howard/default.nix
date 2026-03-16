@@ -20,7 +20,7 @@
   
   networking.hostName = "howard";
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedTCPPorts = [ 22 8000 5173 ];
   networking.firewall.allowedUDPPorts = [ 51820 ]; # Tailscale
 
   # Static IP configuration
@@ -123,6 +123,15 @@
     nmap
     nettools
 
+    # Development/Deployment stack
+    php83
+    php83Packages.composer
+    mysql80
+    nodejs_20
+    flutter
+    rsync
+    devenv
+
     # Compression
     unzip
     zip
@@ -176,9 +185,21 @@
     };
   };
 
+  # MySQL database for Laravel
+  services.mysql = {
+    enable = true;
+    package = pkgs.mysql80;
+    initialDatabases = [{ name = "laravel"; }];
+  };
+
   # Systemd tmpfiles
   systemd.tmpfiles.rules = [
     "d /tmp 1777 root root -"
+    "d /var/www 755 ali ali -"
+    "d /var/www/backend 755 ali ali -"
+    "d /var/www/teacherspanel 755 ali ali -"
+    "d /var/www/flutter-builds 755 ali ali -"
+    "d /var/log 755 root root -"
   ];
 
   # Automatic upgrades (optional - disabled by default)

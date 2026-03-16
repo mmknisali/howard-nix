@@ -130,8 +130,7 @@
     nodejs_20
     flutter
     rsync
-    devenv
-
+    
     # Compression
     unzip
     zip

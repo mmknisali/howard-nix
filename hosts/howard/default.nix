@@ -73,7 +73,7 @@
       log_level = "info";
     };
     extraConfigFiles = [
-      ./config/ngrok/ngrok.yml
+      "${./config/ngrok/ngrok.yml}"
     ];
     tunnels = {
       http = {

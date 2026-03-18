@@ -99,6 +99,7 @@
     htop
     tmux
     tree
+    ngrok
 
     # Shell enhancements
     zsh

@@ -66,6 +66,23 @@
     ];
   };
 
+  # Ngrok - expose local services via tunnel
+  services.ngrok = {
+    enable = true;
+    extraConfig = {
+      log_level = "info";
+    };
+    extraConfigFiles = [
+      ./config/ngrok/ngrok.yml
+    ];
+    tunnels = {
+      http = {
+        proto = "http";
+        addr = "8000";
+      };
+    };
+  };
+
   # User configuration
   users.users.ali = {
     isNormalUser = true;
@@ -99,7 +116,6 @@
     htop
     tmux
     tree
-    ngrok
 
     # Shell enhancements
     zsh

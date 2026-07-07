@@ -2,16 +2,17 @@
   description = "NixOS configuration for howard";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixpkgs-unstable";
+    lazyvim.url = "github:pfassina/lazyvim-nix";
+    devenv.url = "github:cachix/devenv/9e5c17caf0ead1bb29d430d4c0a26a77bc5d374b";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable }: {
+  outputs = { self, nixpkgs, lazyvim, devenv, ... }@inputs: {
     nixosConfigurations = {
       howard = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = {
-          pkgs-unstable = nixpkgs-unstable.legacyPackages.x86_64-linux;
+        inherit inputs;
         };
         modules = [
           ./hosts/howard

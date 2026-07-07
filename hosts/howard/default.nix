@@ -5,6 +5,7 @@
     ./hardware-configuration.nix
     ./config/starship/starship.nix
     ./config/zsh/zsh.nix
+    ./github.nix
   ];
 
   hydeZsh = {
@@ -128,9 +129,9 @@
     php83Packages.composer
     mysql80
     nodejs_20
-    flutter
     rsync
-    
+    (inputs.devenv.packages.x86_64-linux.default)
+
     # Compression
     unzip
     zip
@@ -150,13 +151,14 @@
 
     # Tailscale (should auto-install via service, but ensuring package)
     tailscale
+    cloudflared
   ];
 
   # Configure zsh as default shell for user
   users.defaultUserShell = pkgs.zsh;
 
   # System state version - FIXED: Added to suppress warning
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.11";
 
   # Timezone
   time.timeZone = "America/New_York";

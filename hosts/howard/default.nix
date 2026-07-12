@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -27,15 +27,15 @@
   # Static IP configuration
   systemd.network = {
     enable = true;
-    networks."10-eth0" = {
-      matchConfig.Name = "enp1s0";
-      networkConfig = {
-        Address = [ "192.168.1.10/24" ];
-        Gateway = "192.168.1.1";
-        DNS = [ "192.168.1.1" "1.1.1.1" "8.8.8.8" ];
+      networks."10-eth0" = {
+        matchConfig.Name = "enp2s0";
+        networkConfig = {
+          Address = "192.168.1.10/24";
+          Gateway = "192.168.1.1";
+          DNS = [ "192.168.1.1" "1.1.1.1" "8.8.8.8" ];
+        };
       };
     };
-  };
 
 
   # Disable DHCP since we're using static IP with systemd.network
@@ -112,7 +112,6 @@
 
     # System info
     fastfetch
-    neofetch
    
     #screensaver
     cmatrix
@@ -125,10 +124,6 @@
     nettools
 
     # Development/Deployment stack
-    php83
-    php83Packages.composer
-    mysql80
-    nodejs_20
     rsync
     (inputs.devenv.packages.x86_64-linux.default)
 
@@ -186,12 +181,6 @@
     };
   };
 
-  # MySQL database for Laravel
-  services.mysql = {
-    enable = true;
-    package = pkgs.mysql80;
-    initialDatabases = [{ name = "laravel"; }];
-  };
 
   # Systemd tmpfiles
   systemd.tmpfiles.rules = [
@@ -218,6 +207,24 @@
 
   # Firmware updates
   services.fwupd.enable = true;
+
+  # Fail2ban - rate limiting for SSH (journald backend, iptables firewall)
+  services.fail2ban = {
+    enable = true;
+    maxretry = 5;
+    bantime = "24h";
+    banaction = "iptables-multiport";
+    bantime-increment = {
+      enable = true;
+      overalljails = true;
+      maxtime = "168h";
+    };
+    jails.sshd.settings = {
+      enabled = true;
+      backend = "systemd";
+      banaction = "iptables-multiport";
+    };
+  };
 
   # Sudo configuration
   security.sudo.wheelNeedsPassword = false;

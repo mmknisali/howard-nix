@@ -1,0 +1,39 @@
+# modules/github-runner.nix
+{ config, pkgs, lib, inputs, ... }:
+{
+  services.github-runners.howard-runner = {
+    enable = true;
+    name = "howard-runner";
+    url = "https://github.com/mmknisali/site";
+    tokenFile = "/etc/github-runner/token";
+    ephemeral = false;
+    extraLabels = [ "howard" ];
+    extraPackages = with pkgs; [
+      nodejs_22
+      sqlite
+      cloudflared
+      gh
+      git
+      curl
+      psmisc
+      procps
+      openssh
+      (inputs.devenv.packages.x86_64-linux.default)
+    ];
+    user = "ali";
+
+    # The runner needs to read/write the deploy trees at
+    # /home/ali/vertha-staging and /home/ali/vertha-prod. The NixOS
+    # module hardens the service with ProtectHome=true, which makes
+    # /home, /root, and /run/user invisible to the process. The
+    # documented escape hatch is serviceOverrides (see
+    # nixos/modules/services/continuous-integration/github-runner/options.nix).
+    serviceOverrides = {
+      ProtectHome = false;
+    };
+  };
+
+  systemd.tmpfiles.rules = [
+    "d /var/lib/github-runner/howard-runner 0750 ali ali -"
+  ];
+}

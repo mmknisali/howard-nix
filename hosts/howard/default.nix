@@ -21,8 +21,8 @@
   
   networking.hostName = "howard";
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 8000 5173 ];
-  networking.firewall.allowedUDPPorts = [ 51820 ]; # Tailscale
+  networking.firewall.allowedTCPPorts = [ 22 25565 8000 5173 8080 8443 2022 ];
+  networking.firewall.allowedUDPPorts = [ 51820 25565 ]; # Tailscale; Minecraft
 
   # Static IP configuration
   systemd.network = {
@@ -38,6 +38,11 @@
     };
 
 
+  services.playit = {
+    enable = true;
+    secretPath = "/etc/playit/playit.toml";
+  };
+  
   # Disable DHCP since we're using static IP with systemd.network
   networking.useDHCP = false;
   networking.useNetworkd = true;

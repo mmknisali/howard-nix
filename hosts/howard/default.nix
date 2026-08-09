@@ -77,11 +77,11 @@
     isNormalUser = true;
     description = "Ali";
     extraGroups = [ "wheel" "networkmanager" ];
-    openssh.authorizedKeys.keyFiles = [ /home/ali/howard-nix/hosts/howard/keys ];
+    openssh.authorizedKeys.keyFiles = [ ./keys ];
   };
 
   users.users.root = {
-    openssh.authorizedKeys.keyFiles = [ /home/ali/howard-nix/hosts/howard/keys ];
+    openssh.authorizedKeys.keyFiles = [ ./keys ];
  };
 
   users.users.root.shell = pkgs.zsh;

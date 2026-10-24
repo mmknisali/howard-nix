@@ -11,7 +11,6 @@
     lazyvim.url = "github:pfassina/lazyvim-nix";
     devenv.url = "github:cachix/devenv/9e5c17caf0ead1bb29d430d4c0a26a77bc5d374b";
     playit-nixos-module.url = "github:pedorich-n/playit-nixos-module";
-    disko.url = "github:nix-community/disko";
   };
 
   outputs = { self, nixpkgs, lazyvim, devenv, playit-nixos-module, ... }@inputs: {
@@ -24,8 +23,6 @@
         modules = [
           ./hosts/howard
           playit-nixos-module.nixosModules.default
-          inputs.disko.nixosModules.disko
-          ./disko.nix
         ];
       };
     };

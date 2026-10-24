@@ -21,7 +21,7 @@
   
   networking.hostName = "howard";
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 25565 8000 5173 8080 8443 2022 ];
+  networking.firewall.allowedTCPPorts = [ 22 25565 8000 5173 8080 8443 2022 3000 ];
   networking.firewall.allowedUDPPorts = [ 51820 25565 ]; # Tailscale; Minecraft
 
   # Static IP configuration
@@ -72,11 +72,17 @@
     ];
   };
 
+  virtualisation.docker.enable = true;
+# Optional: Enable rootless mode instead for better security
+   virtualisation.docker.rootless = {
+     enable = true;
+     setSocketVariable = true;
+   };
   # User configuration
   users.users.ali = {
     isNormalUser = true;
     description = "Ali";
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
     openssh.authorizedKeys.keyFiles = [ ./keys ];
   };
 
@@ -185,6 +191,34 @@
       options = "--delete-older-than 7d";
     };
   };
+
+# dns bypass
+networking.nameservers = [ "127.0.0.1" "::1" ];
+networking.networkmanager.dns = "none";
+services.dnscrypt-proxy = {
+enable = true;
+  settings = {
+    ipv6_servers = false;
+    require_dnssec = false;
+    listen_addresses = [ "127.0.0.1:53" "[::1]:53" ];
+    sources.public-resolvers = {
+      urls = [
+        "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
+        "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
+      ];
+      cache_file = "/var/cache/dnscrypt-proxy/public-resolvers.md";
+      minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+    };
+  };
+};
+   #Zapret DPI bypass
+services.zapret = {
+  enable = true;
+  params = [
+    "--dpi-desync=fake"
+    "--dpi-desync-ttl=3"
+  ];
+};
 
 
   # Systemd tmpfiles
